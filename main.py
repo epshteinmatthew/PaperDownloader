@@ -8,7 +8,10 @@ paperslist = requests.get("https://modeldb.science/api/v1/papers").json()
 
 
 def downloadpaper(code, dest):
-    pmid = requests.get("https://modeldb.science/api/v1/papers/" + paper).json()["pubmed_id"]["value"]
+    try:
+        pmid = requests.get("https://modeldb.science/api/v1/papers/" + paper).json()["pubmed_id"]["value"]
+    except:
+        return
     pmdata = requests.get("https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/?tool=my_tool&email=my_email@example.com&ids=" + pmid + "&format=json").json()["records"][0]
     if("pmcid" not in pmdata.keys()):
         return
