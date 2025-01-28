@@ -1,4 +1,7 @@
 #https://modeldb.science/api/v1/papers
+import urllib.request
+from bs4 import BeautifulSoup
+
 import requests, json
 
 paperslist = requests.get("https://modeldb.science/api/v1/papers").json()
@@ -10,11 +13,19 @@ def downloadpaper(code, dest):
     if("pmcid" not in pmdata.keys()):
         return
     pmcid = pmdata["pmcid"]
-    print(pmcid)
     #403! need to get around this somehow
     #https://pmc.ncbi.nlm.nih.gov/tools/oai/
-    filedata = requests.get("https://pmc.ncbi.nlm.nih.gov/articles/" + pmcid + "/pdf/", allow_redirects=True)
-    open(dest+"/"+pmcid, 'wb').write(filedata.content)
+    fileadress = requests.get("https://www.ncbi.nlm.nih.gov/pmc/utils/oa/oa.fcgi?id=" + pmcid + "&format=pdf", allow_redirects=True).content
+    data = BeautifulSoup(fileadress, "xml")
+    ftpadress = data.find_all("link")
+    if(len(ftpadress) > 0):
+        ftpadress = ftpadress[0]["href"]
+        print(pmcid)
+    else:
+        print("no pdf")
+        return
+    urllib.request.urlretrieve(ftpadress, pmcid)
+
 
 for paper in paperslist:
     downloadpaper(paper, "papers")
