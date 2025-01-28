@@ -24,7 +24,7 @@ def downloadpaper(code, dest):
     else:
         print("no pdf")
         return
-    urllib.request.urlretrieve(ftpadress, pmcid)
+    urllib.request.urlretrieve(ftpadress, "papers/" + pmcid + ".pdf")
 
 
 for paper in paperslist:
