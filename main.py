@@ -46,7 +46,7 @@ async def download_paper(session, code, dest):
 
 async def main():
     async with aiohttp.ClientSession() as session:
-        tasks = [download_paper(session, paper, "papers/") for paper in paperslist[40000:90000]]
+        tasks = [download_paper(session, paper, "papers/") for paper in paperslist[70000:90000]]
         await asyncio.gather(*tasks)
     for i in range(len(linkslist)):
         urllib.request.urlretrieve(linkslist[i], "papers/" + idlist[i] + ".pdf")
